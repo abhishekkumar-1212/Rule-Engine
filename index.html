@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Engine Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rule Engine Interface</h1>
+
+        <!-- Create Rule Section -->
+        <div class="form-group">
+            <label for="ruleInput">Enter Rule:</label>
+            <textarea id="ruleInput" rows="4" placeholder="e.g., (age > 30 AND department = 'Sales') OR (age < 25 AND department = 'Marketing')"></textarea>
+        </div>
+        <button onclick="createRule()">Create Rule</button>
+
+        <!-- List Rules Section -->
+        <button onclick="listRules()">List Rules</button>
+
+        <!-- Combine Rules Section -->
+        <div class="form-group">
+            <label for="combineInput">Enter Rule IDs to Combine (comma-separated):</label>
+            <input type="text" id="combineInput" placeholder="e.g., 1,2">
+        </div>
+        <button onclick="combineRules()">Combine Rules</button>
+
+        <!-- Evaluate Rule Section -->
+        <div class="form-group">
+            <label for="dataInput">Enter User Data (JSON):</label>
+            <textarea id="dataInput" rows="4" placeholder='{"age": 35, "department": "Sales", "salary": 60000, "experience": 3}'></textarea>
+        </div>
+        <button onclick="evaluateRule()">Evaluate Rule</button>
+
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        // Function to create a rule
+        function createRule() {
+            const ruleInput = document.getElementById("ruleInput").value;
+
+            fetch('http://localhost:8080/rules', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rule_name: "Custom Rule",
+                    rule_ast: ruleInput,
+                    description: "A dynamically created rule"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("output").innerText = `Rule Created: ${JSON.stringify(data)}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Function to list rules
+        function listRules() {
+            fetch('http://localhost:8080/rules/list', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("output").innerText = `Rules: ${JSON.stringify(data)}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Function to combine rules
+        function combineRules() {
+            const combineInput = document.getElementById("combineInput").value;
+            const ruleIds = combineInput.split(',').map(id => id.trim());
+
+            fetch('http://localhost:8080/rules/combine', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rule_ids: ruleIds
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("output").innerText = `Combined Rule: ${JSON.stringify(data)}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Function to evaluate rule
+        function evaluateRule() {
+            const dataInput = document.getElementById("dataInput").value;
+
+            fetch('http://localhost:8080/rules/evaluate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: dataInput
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("output").innerText = `Evaluation Result: ${data.result}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
