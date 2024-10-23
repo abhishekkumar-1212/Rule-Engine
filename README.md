@@ -1,20 +1,20 @@
 
 # Rule Engine with AST
-Objective
+# Objective
 The goal of this project is to develop a simple 3-tier rule engine application to determine user eligibility based on various attributes like age, department, income, spend, etc. The system uses an Abstract Syntax Tree (AST) to represent conditional rules, allowing for dynamic creation, combination, and modification of these rules.
 
-Features
+# Features
 Dynamic Rule Creation: Users can define eligibility rules using conditional expressions.
 AST Representation: Rules are represented as ASTs, making it easy to parse, combine, and evaluate.
 Efficient Rule Combination: The system minimizes redundant checks when combining rules.
 Simple UI & API: Frontend and backend components to manage rule creation, combination, and evaluation.
-Backend in Golang: Built using Go for efficient backend performance and scalability.
-Data Structure
+
+# Backend in Golang
+Built using Go for efficient backend performance and scalability.
+# Data Structure
 The rule engine uses an AST to represent rules. Each rule is parsed into a tree-like structure, with the following data structure:
 
-Node Structure
-go
-Copy code
+# Node Structure
 type Node struct {
     Type  string  // "operator" for AND/OR, "operand" for conditions
     Left  *Node   // Reference to the left child
@@ -28,7 +28,7 @@ Data Storage
 Database
 The rules and application metadata are stored in a database. The choice of database can be adjusted based on scalability and performance requirements.
 
-Sample Schema
+# Sample Schema
 Table Name	Columns
 rules	id (PK), rule_string (text), created_at
 rule_metadata	id (PK), rule_id (FK), attribute, condition
@@ -58,17 +58,15 @@ Creating Individual Rules: Verify the AST representation of individual rules usi
 Combining Rules: Use combine_rules and ensure the resulting AST reflects the combined logic.
 Evaluating Rules: Implement sample JSON data and test evaluate_rule for different scenarios.
 Extending Functionality: Combine additional rules and test the overall functionality.
-Backend (Golang)
+# Backend (Golang)
 Setup Instructions
 Prerequisites: Ensure Go is installed.
 Install Dependencies: Run go mod tidy to install required packages.
 Run the Application:
 bash
-Copy code
 go run main.go
 Sample Code
 go
-Copy code
 // CreateRule parses a rule string and returns an AST node
 func CreateRule(ruleString string) *Node {
     // Logic to parse rule string into AST
@@ -83,8 +81,8 @@ func CombineRules(rules []string) *Node {
 func EvaluateRule(data map[string]interface{}, rule *Node) bool {
     // Logic to evaluate data using the AST
 }
-Contributing
+# Contributing
 Feel free to contribute to this project by creating issues or submitting pull requests. Please make sure to follow the code style and add tests for new features.
 
-License
+# License
 This project is licensed under the MIT License. See the LICENSE file for details.
