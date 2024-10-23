@@ -1,5 +1,5 @@
 
-Rule Engine with AST
+# Rule Engine with AST
 Objective
 The goal of this project is to develop a simple 3-tier rule engine application to determine user eligibility based on various attributes like age, department, income, spend, etc. The system uses an Abstract Syntax Tree (AST) to represent conditional rules, allowing for dynamic creation, combination, and modification of these rules.
 
